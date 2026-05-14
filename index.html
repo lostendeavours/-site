@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="meta.title">Lost Endeavours — Horror Surf From Outer Space</title>
+  <meta name="description" data-i18n="meta.description" data-i18n-attr="content" content="Lost Endeavours — three-piece horror surf band from outer space, est. 2020. Shows, bio, booking." />
+  <meta name="theme-color" content="#000000" />
+
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee+Inline&family=Creepster&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('le-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (_) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#hero" class="nav-brand" aria-label="Lost Endeavours — home">
+        <img src="assets/logo.jpg" alt="" class="nav-logo" />
+        <span>Lost Endeavours</span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="#about" data-i18n="nav.about">About</a></li>
+        <li><a href="#members" data-i18n="nav.members">Band</a></li>
+        <li><a href="#shows" data-i18n="nav.shows">Shows</a></li>
+        <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+        <li class="nav-theme">
+          <button type="button" id="theme-toggle" class="theme-btn" aria-label="Switch to light mode" data-i18n="nav.theme_to_light" data-i18n-attr="aria-label">
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+            </svg>
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </li>
+        <li class="nav-lang" role="group" aria-label="Language">
+          <span class="visually-hidden" data-i18n="nav.lang_label">Language</span>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="true">EN</button>
+          <span class="lang-sep" aria-hidden="true">|</span>
+          <button type="button" class="lang-btn" data-lang="de" aria-pressed="false">DE</button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="hero" class="hero">
+      <div class="hero-inner">
+        <img src="assets/logo.jpg" alt="Lost Endeavours logo" class="hero-logo" />
+        <p class="hero-tagline" data-i18n="hero.tagline">Horror Surf From Outer Space</p>
+        <p class="hero-est" data-i18n="hero.est">EST. 2020</p>
+        <div class="hero-cta">
+          <a href="#shows" class="btn btn-primary" data-i18n="hero.cta_shows">Upcoming Shows</a>
+          <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta_book">Book Us</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="container about-grid">
+        <div class="about-text">
+          <h2 class="section-heading" data-i18n="about.heading">About</h2>
+          <p class="about-body" data-i18n="about.body">Born in 2020 from the dust of an abandoned drive-in and the static of a forgotten satellite, Lost Endeavours blend surf-rock twang with horror-flick atmosphere. Three musicians, one mission — bring sounds from outer space back to earth: loud, reverb-soaked, and a little unhinged.</p>
+        </div>
+        <div class="about-photo">
+          <img src="assets/band-1.jpg" alt="Lost Endeavours performing live" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <section id="members" class="section section-alt">
+      <div class="container">
+        <h2 class="section-heading" data-i18n="members.heading">The Band</h2>
+        <ul class="members-grid">
+          <li class="member-card" style="--pos-x: 25%; --pos-y: 0%; --img-zoom: 1.25; --img-shift-x: 10%; --img-shift-y: 8%;">
+            <figure class="member-figure">
+              <img src="assets/andy.jpg" alt="Andy Lostendeavours" loading="lazy" />
+              <figcaption class="member-overlay">
+                <span class="member-name">Andy Lostendeavours</span>
+                <span class="member-role" data-i18n="members.andy_role">Guitar</span>
+              </figcaption>
+            </figure>
+          </li>
+          <li class="member-card" style="--pos-x: 38%; --pos-y: 0%; --img-zoom: 1.3; --img-shift-x: 0%; --img-shift-y: 10%;">
+            <figure class="member-figure">
+              <img src="assets/gigi.jpg" alt="Gigi Lostendeavours" loading="lazy" />
+              <figcaption class="member-overlay">
+                <span class="member-name">Gigi Lostendeavours</span>
+                <span class="member-role" data-i18n="members.gigi_role">Bass</span>
+              </figcaption>
+            </figure>
+          </li>
+          <li class="member-card" style="--pos-x: 32%; --pos-y: 20%;">
+            <figure class="member-figure">
+              <img src="assets/simon.jpg" alt="Simon Lostendeavours" loading="lazy" />
+              <figcaption class="member-overlay">
+                <span class="member-name">Simon Lostendeavours</span>
+                <span class="member-role" data-i18n="members.simon_role">Drums</span>
+              </figcaption>
+            </figure>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="shows" class="section">
+      <div class="container">
+        <h2 class="section-heading" data-i18n="shows.heading">Upcoming Shows</h2>
+        <ul id="shows-list" class="shows-list" aria-live="polite"></ul>
+        <p id="shows-empty" class="shows-empty" data-i18n="shows.empty" hidden>No shows scheduled yet — follow us on Instagram for updates.</p>
+      </div>
+    </section>
+
+    <section id="contact" class="section section-alt">
+      <div class="container">
+        <h2 class="section-heading" data-i18n="contact.heading">Get In Touch</h2>
+        <div class="contact-grid">
+          <article class="contact-card">
+            <h3 class="contact-card-heading" data-i18n="contact.casual_heading">Say hi</h3>
+            <p data-i18n="contact.casual_body">Follow us on Instagram for new music, behind-the-scenes, and tour announcements.</p>
+            <a href="https://instagram.com/lostendeavours" class="btn btn-primary" target="_blank" rel="noopener noreferrer" data-i18n="contact.casual_cta">Follow on Instagram</a>
+          </article>
+          <article class="contact-card">
+            <h3 class="contact-card-heading" data-i18n="contact.pro_heading">Book Us</h3>
+            <p data-i18n="contact.pro_body">Venues, festivals, promoters — get in touch about bookings, riders and dates.</p>
+            <a href="mailto:lostendeavours20@gmail.com" class="btn btn-ghost" data-i18n="contact.pro_cta">Email Us</a>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-tagline" data-i18n="footer.tagline">Horror Surf From Outer Space</p>
+      <p class="footer-rights">© <span id="year">2026</span> Lost Endeavours. <span data-i18n="footer.rights">All rights reserved.</span></p>
+      <a href="https://instagram.com/lostendeavours" class="footer-ig" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line>
+        </svg>
+      </a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

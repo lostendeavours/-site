@@ -1,0 +1,82 @@
+{
+  "en": {
+    "meta.title": "Lost Endeavours — Horror Surf From Outer Space",
+    "meta.description": "Lost Endeavours — three-piece horror surf band from outer space, est. 2020. Shows, bio, booking.",
+
+    "nav.about": "About",
+    "nav.members": "Band",
+    "nav.shows": "Shows",
+    "nav.contact": "Contact",
+    "nav.lang_label": "Language",
+    "nav.theme_to_light": "Switch to light mode",
+    "nav.theme_to_dark": "Switch to dark mode",
+
+    "hero.tagline": "Horror Surf From Outer Space",
+    "hero.est": "EST. 2020",
+    "hero.cta_shows": "Upcoming Shows",
+    "hero.cta_book": "Book Us",
+
+    "about.heading": "About",
+    "about.body": "Born in 2020 from the dust of an abandoned drive-in and the static of a forgotten satellite, Lost Endeavours blend surf-rock twang with horror-flick atmosphere. Three musicians, one mission — bring sounds from outer space back to earth: loud, reverb-soaked, and a little unhinged.",
+
+    "members.heading": "The Band",
+    "members.andy_role": "Guitar",
+    "members.gigi_role": "Bass",
+    "members.simon_role": "Drums",
+
+    "shows.heading": "Upcoming Shows",
+    "shows.empty": "No shows scheduled yet — follow us on Instagram for updates.",
+    "shows.tickets": "Tickets",
+
+    "contact.heading": "Get In Touch",
+    "contact.casual_heading": "Say hi",
+    "contact.casual_body": "Follow us on Instagram for new music, behind-the-scenes, and tour announcements.",
+    "contact.casual_cta": "Follow on Instagram",
+    "contact.pro_heading": "Book Us",
+    "contact.pro_body": "Venues, festivals, promoters — get in touch about bookings, riders and dates.",
+    "contact.pro_cta": "Email Us",
+
+    "footer.rights": "All rights reserved.",
+    "footer.tagline": "Horror Surf From Outer Space"
+  },
+  "de": {
+    "meta.title": "Lost Endeavours — Horror Surf aus dem Weltraum",
+    "meta.description": "Lost Endeavours — Horror-Surf-Trio aus dem Weltraum, gegr. 2020. Konzerte, Bio, Booking.",
+
+    "nav.about": "Über uns",
+    "nav.members": "Band",
+    "nav.shows": "Konzerte",
+    "nav.contact": "Kontakt",
+    "nav.lang_label": "Sprache",
+    "nav.theme_to_light": "Zum hellen Modus wechseln",
+    "nav.theme_to_dark": "Zum dunklen Modus wechseln",
+
+    "hero.tagline": "Horror Surf aus dem Weltraum",
+    "hero.est": "GEGR. 2020",
+    "hero.cta_shows": "Kommende Konzerte",
+    "hero.cta_book": "Buch uns",
+
+    "about.heading": "Über uns",
+    "about.body": "Geboren 2020 zwischen dem Staub eines verlassenen Autokinos und dem Rauschen eines vergessenen Satelliten, vereinen Lost Endeavours surf-rockigen Twang mit der Atmosphäre alter Horrorfilme. Drei Musiker, eine Mission — Klänge aus dem Weltraum zur Erde zurückbringen: laut, hallgetränkt und ein bisschen verrückt.",
+
+    "members.heading": "Die Band",
+    "members.andy_role": "Gitarre",
+    "members.gigi_role": "Bass",
+    "members.simon_role": "Schlagzeug",
+
+    "shows.heading": "Kommende Konzerte",
+    "shows.empty": "Aktuell sind keine Konzerte geplant — folgt uns auf Instagram für Updates.",
+    "shows.tickets": "Tickets",
+
+    "contact.heading": "Kontakt",
+    "contact.casual_heading": "Sag Hi",
+    "contact.casual_body": "Folgt uns auf Instagram für neue Musik, Backstage-Eindrücke und Tour-Ankündigungen.",
+    "contact.casual_cta": "Auf Instagram folgen",
+    "contact.pro_heading": "Buch uns",
+    "contact.pro_body": "Venues, Festivals, Veranstalter — meldet euch zu Bookings, Ridern und Terminen.",
+    "contact.pro_cta": "E-Mail schreiben",
+
+    "footer.rights": "Alle Rechte vorbehalten.",
+    "footer.tagline": "Horror Surf aus dem Weltraum"
+  }
+}
