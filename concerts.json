@@ -2,7 +2,13 @@
   {
     "date": "2026-08-15",
     "venue": "Sonic Ballroom",
-    "city": "Köln",
+    "city": "KÃ¶ln",
+    "country": "DE"
+  },
+  {
+    "date": "2027-01-30",
+    "venue": "(kommt später)",
+    "city": "Bremen",
     "country": "DE"
   }
 ]
