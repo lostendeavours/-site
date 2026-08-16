@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LE Admin — Concert Manager</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpg" />
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000;
+      --surface: #111;
+      --surface-2: #1a1a1a;
+      --accent: #39FF14;
+      --accent-dim: #2bcc10;
+      --text: #e8e8e8;
+      --muted: #888;
+      --danger: #ff4444;
+      --danger-hover: #cc3333;
+      --radius: 10px;
+      --max-w: 600px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ===== Screens ===== */
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: flex; flex-direction: column; }
+
+    /* ===== Screen 1 — Login ===== */
+    #login-screen {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .login-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+
+    .login-subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    #g_id_onload, .g_id_signin { margin-bottom: 1rem; }
+
+    .login-error {
+      color: var(--danger);
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .login-error.visible { display: block; }
+
+    /* ===== PAT Setup ===== */
+    #pat-screen {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .pat-box {
+      background: var(--surface);
+      border: 1px solid #333;
+      border-radius: var(--radius);
+      padding: 2rem;
+      max-width: var(--max-w);
+      width: 100%;
+    }
+
+    .pat-box h2 {
+      color: var(--accent);
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .pat-box p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    /* ===== Shared form elements ===== */
+    .field { margin-bottom: 1.25rem; text-align: left; }
+
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 0.7rem 0.85rem;
+      background: var(--surface-2);
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field input:focus { border-color: var(--accent); }
+    .field input::placeholder { color: #555; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+      text-decoration: none;
+    }
+
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--accent-dim); }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+    .btn-danger:hover:not(:disabled) { background: var(--danger-hover); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid #333;
+    }
+    .btn-ghost:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
+
+    /* ===== Screen 2 — Concert List ===== */
+    .list-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
+      border-bottom: 1px solid #222;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .list-header h1 {
+      font-size: 1.25rem;
+      color: var(--accent);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-add {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      line-height: 1;
+    }
+    .btn-add:hover { background: var(--accent-dim); }
+
+    .btn-logout {
+      background: none;
+      border: 1px solid #333;
+      color: var(--muted);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-logout:hover { color: var(--text); border-color: var(--text); }
+
+    .concert-list {
+      list-style: none;
+      padding: 0.75rem;
+      flex: 1;
+    }
+
+    .concert-item {
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid #222;
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.6rem;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .concert-item:hover { border-color: var(--accent); }
+
+    .concert-item.past { opacity: 0.5; }
+
+    .concert-info { flex: 1; min-width: 0; }
+
+    .concert-date {
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 0.15rem;
+    }
+
+    .concert-venue {
+      font-size: 1rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .concert-location {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .concert-arrow {
+      color: var(--muted);
+      font-size: 1.2rem;
+      margin-left: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .list-empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 4rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    .list-footer {
+      text-align: center;
+      padding: 1rem;
+      border-top: 1px solid #222;
+    }
+
+    .btn-change-pat {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .btn-change-pat:hover { color: var(--text); }
+
+    /* ===== Screen 3 — Editor ===== */
+    .editor-header {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
+      border-bottom: 1px solid #222;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      margin-right: 1rem;
+      padding: 0;
+      line-height: 1;
+    }
+    .btn-back:hover { color: var(--text); }
+
+    .editor-header h1 {
+      font-size: 1.15rem;
+      color: var(--accent);
+    }
+
+    .editor-form {
+      padding: 1.5rem 1.25rem;
+      max-width: var(--max-w);
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .editor-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .editor-actions .btn-primary { flex: 1; min-width: 140px; }
+    .editor-actions .btn-danger { min-width: 100px; }
+
+    .feedback {
+      text-align: center;
+      padding: 0.6rem;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .feedback.visible { display: block; }
+    .feedback.success { background: #0a2e0a; color: var(--accent); border: 1px solid #1a4a1a; }
+    .feedback.error { background: #2e0a0a; color: var(--danger); border: 1px solid #4a1a1a; }
+
+    /* ===== Loading / spinner ===== */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 0.4rem;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60vh;
+      color: var(--muted);
+    }
+
+    /* ===== Confirm dialog ===== */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      padding: 1rem;
+    }
+    .overlay.visible { display: flex; }
+
+    .dialog {
+      background: var(--surface);
+      border: 1px solid #333;
+      border-radius: var(--radius);
+      padding: 2rem;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .dialog h3 { margin-bottom: 0.5rem; color: var(--text); }
+    .dialog p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+    .dialog-btns {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    /* ===== Responsive ===== */
+    @media (min-width: 768px) {
+      .concert-list { max-width: var(--max-w); margin: 0 auto; padding: 1.5rem; }
+      .list-header { padding: 1rem 2rem; }
+      .editor-header { padding: 1rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== SCREEN 1: LOGIN ===== -->
+  <div id="login-screen" class="screen active">
+    <img src="assets/logo.jpg" alt="Lost Endeavours" class="login-logo" />
+    <h1 class="login-title">LE Admin</h1>
+    <p class="login-subtitle">Concert Manager</p>
+
+    <div id="google-btn"></div>
+
+    <p id="login-error" class="login-error"></p>
+  </div>
+
+  <!-- ===== SCREEN: PAT SETUP ===== -->
+  <div id="pat-screen" class="screen">
+    <div class="pat-box">
+      <h2>GitHub Access Token</h2>
+      <p>
+        To save concerts to the website, the admin needs a GitHub Personal Access Token.<br>
+        Go to GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token.<br>
+        Scope it to the <strong>-site</strong> repo with <strong>Contents: Read and Write</strong>.<br>
+        This only needs to be done once per device.
+      </p>
+      <div class="field">
+        <label for="pat-input">Personal Access Token</label>
+        <input type="password" id="pat-input" placeholder="github_pat_..." />
+      </div>
+      <button class="btn btn-primary" id="pat-save" style="width:100%;">Save & Continue</button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN 2: CONCERT LIST ===== -->
+  <div id="list-screen" class="screen">
+    <div class="list-header">
+      <h1>Concerts</h1>
+      <div class="header-actions">
+        <button class="btn-add" id="btn-new" title="Add concert">+</button>
+        <button class="btn-logout" id="btn-logout">Logout</button>
+      </div>
+    </div>
+
+    <div id="list-loading" class="loading-screen">
+      <span><span class="spinner"></span> Loading concerts…</span>
+    </div>
+
+    <ul id="concert-list" class="concert-list" style="display:none;"></ul>
+    <div id="list-empty" class="list-empty" style="display:none;">
+      No concerts yet. Click <strong>+</strong> to add one.
+    </div>
+
+    <div class="list-footer">
+      <button class="btn-change-pat" id="btn-change-pat">Change GitHub Token</button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN 3: EDITOR ===== -->
+  <div id="editor-screen" class="screen">
+    <div class="editor-header">
+      <button class="btn-back" id="btn-editor-back" title="Back">←</button>
+      <h1 id="editor-title">New Concert</h1>
+    </div>
+
+    <div class="editor-form">
+      <div id="editor-feedback" class="feedback"></div>
+
+      <div class="field">
+        <label for="ed-date">Date</label>
+        <input type="date" id="ed-date" required />
+      </div>
+      <div class="field">
+        <label for="ed-venue">Venue</label>
+        <input type="text" id="ed-venue" placeholder="e.g. Sonic Ballroom" required />
+      </div>
+      <div class="field">
+        <label for="ed-city">City</label>
+        <input type="text" id="ed-city" placeholder="e.g. Köln" required />
+      </div>
+      <div class="field">
+        <label for="ed-country">Country</label>
+        <input type="text" id="ed-country" placeholder="e.g. DE" maxlength="5" required />
+      </div>
+      <div class="field">
+        <label for="ed-ticket">Ticket URL <span style="color:#555;">(optional)</span></label>
+        <input type="url" id="ed-ticket" placeholder="https://..." />
+      </div>
+
+      <div class="editor-actions">
+        <button class="btn btn-primary" id="btn-save">
+          Save
+        </button>
+        <button class="btn btn-danger" id="btn-delete" style="display:none;">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DELETE CONFIRM DIALOG ===== -->
+  <div id="delete-overlay" class="overlay">
+    <div class="dialog">
+      <h3>Delete this concert?</h3>
+      <p>This will remove it from the live website. This action cannot be undone.</p>
+      <div class="dialog-btns">
+        <button class="btn btn-ghost" id="btn-cancel-delete">Cancel</button>
+        <button class="btn btn-danger" id="btn-confirm-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (() => {
+    /* ===== Config ===== */
+    const GOOGLE_CLIENT_ID = '569633438525-ql6mvqcegk5c84ivotq2feqcolotkbtv.apps.googleusercontent.com';
+    const ALLOWED_EMAILS = ['lostendeavours20@gmail.com'];
+    const REPO_API = 'https://api.github.com/repos/lostendeavours/-site/contents/concerts.json';
+    const PAT_KEY = 'le-admin-pat';
+
+    /* ===== State ===== */
+    let concerts = [];
+    let fileSha = null;
+    let editIndex = -1; // -1 = new concert
+    let googleUser = null;
+
+    /* ===== DOM refs ===== */
+    const screens = {
+      login: document.getElementById('login-screen'),
+      pat: document.getElementById('pat-screen'),
+      list: document.getElementById('list-screen'),
+      editor: document.getElementById('editor-screen'),
+    };
+
+    function showScreen(name) {
+      Object.values(screens).forEach(s => s.classList.remove('active'));
+      screens[name].classList.add('active');
+    }
+
+    /* ===== Google Sign-In ===== */
+    window.handleCredentialResponse = function(response) {
+      const payload = parseJwt(response.credential);
+      if (!payload || !payload.email) {
+        showLoginError('Could not read Google account info.');
+        return;
+      }
+
+      const email = payload.email.toLowerCase();
+      if (!ALLOWED_EMAILS.includes(email)) {
+        showLoginError('Access denied for ' + payload.email + '. This account is not authorised.');
+        return;
+      }
+
+      googleUser = payload;
+      hideLoginError();
+
+      // Check for PAT
+      const pat = localStorage.getItem(PAT_KEY);
+      if (!pat) {
+        showScreen('pat');
+      } else {
+        loadConcertsAndShowList();
+      }
+    };
+
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const json = decodeURIComponent(atob(base64).split('').map(c =>
+          '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        ).join(''));
+        return JSON.parse(json);
+      } catch (e) { return null; }
+    }
+
+    function showLoginError(msg) {
+      const el = document.getElementById('login-error');
+      el.textContent = msg;
+      el.classList.add('visible');
+    }
+
+    function hideLoginError() {
+      document.getElementById('login-error').classList.remove('visible');
+    }
+
+    // Initialize Google Sign-In when library loads
+    window.addEventListener('load', () => {
+      if (typeof google !== 'undefined' && google.accounts) {
+        initGoogleSignIn();
+      } else {
+        // Library might still be loading
+        const check = setInterval(() => {
+          if (typeof google !== 'undefined' && google.accounts) {
+            clearInterval(check);
+            initGoogleSignIn();
+          }
+        }, 200);
+        // Stop checking after 10s
+        setTimeout(() => clearInterval(check), 10000);
+      }
+    });
+
+    function initGoogleSignIn() {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+      });
+      google.accounts.id.renderButton(
+        document.getElementById('google-btn'),
+        { theme: 'filled_black', size: 'large', text: 'signin_with', shape: 'rectangular' }
+      );
+    }
+
+    /* ===== PAT Setup ===== */
+    document.getElementById('pat-save').addEventListener('click', () => {
+      const pat = document.getElementById('pat-input').value.trim();
+      if (!pat) return;
+      localStorage.setItem(PAT_KEY, pat);
+      loadConcertsAndShowList();
+    });
+
+    /* ===== GitHub API ===== */
+    function getPat() {
+      return localStorage.getItem(PAT_KEY) || '';
+    }
+
+    async function fetchConcerts() {
+      const res = await fetch(REPO_API, {
+        headers: {
+          'Authorization': 'Bearer ' + getPat(),
+          'Accept': 'application/vnd.github+json',
+        },
+      });
+      if (!res.ok) throw new Error('GitHub API error: ' + res.status);
+      const data = await res.json();
+      fileSha = data.sha;
+      const content = atob(data.content.replace(/\n/g, ''));
+      return JSON.parse(content);
+    }
+
+    async function saveConcerts(commitMsg) {
+      const json = JSON.stringify(concerts, null, 2) + '\n';
+      const encoded = btoa(unescape(encodeURIComponent(json)));
+      const res = await fetch(REPO_API, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + getPat(),
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: commitMsg,
+          content: encoded,
+          sha: fileSha,
+        }),
+      });
+      if (!res.ok) {
+        const errBody = await res.text();
+        throw new Error('Save failed (' + res.status + '): ' + errBody);
+      }
+      const data = await res.json();
+      fileSha = data.content.sha;
+    }
+
+    /* ===== Screen 2: Concert List ===== */
+    async function loadConcertsAndShowList() {
+      showScreen('list');
+      document.getElementById('list-loading').style.display = 'flex';
+      document.getElementById('concert-list').style.display = 'none';
+      document.getElementById('list-empty').style.display = 'none';
+
+      try {
+        concerts = await fetchConcerts();
+        renderList();
+      } catch (err) {
+        document.getElementById('list-loading').innerHTML =
+          '<span style="color:var(--danger);">Failed to load concerts.<br>' + err.message + '</span>';
+      }
+    }
+
+    function renderList() {
+      document.getElementById('list-loading').style.display = 'none';
+
+      const sorted = concerts
+        .map((c, i) => ({ ...c, _idx: i }))
+        .sort((a, b) => b.date.localeCompare(a.date));
+
+      const ul = document.getElementById('concert-list');
+      ul.innerHTML = '';
+
+      if (sorted.length === 0) {
+        document.getElementById('list-empty').style.display = 'block';
+        ul.style.display = 'none';
+        return;
+      }
+
+      document.getElementById('list-empty').style.display = 'none';
+      ul.style.display = 'block';
+
+      const today = todayISO();
+
+      sorted.forEach(c => {
+        const li = document.createElement('li');
+        li.className = 'concert-item' + (c.date < today ? ' past' : '');
+        li.innerHTML =
+          '<div class="concert-info">' +
+            '<div class="concert-date">' + formatDate(c.date) + '</div>' +
+            '<div class="concert-venue">' + esc(c.venue || '') + '</div>' +
+            '<div class="concert-location">' + esc([c.city, c.country].filter(Boolean).join(', ')) + '</div>' +
+          '</div>' +
+          '<span class="concert-arrow">›</span>';
+        li.addEventListener('click', () => openEditor(c._idx));
+        ul.appendChild(li);
+      });
+    }
+
+    function todayISO() {
+      const d = new Date();
+      return d.getFullYear() + '-' +
+        String(d.getMonth() + 1).padStart(2, '0') + '-' +
+        String(d.getDate()).padStart(2, '0');
+    }
+
+    function formatDate(iso) {
+      const d = new Date(iso + 'T00:00:00');
+      if (isNaN(d.getTime())) return iso;
+      return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function esc(str) {
+      const el = document.createElement('span');
+      el.textContent = str;
+      return el.innerHTML;
+    }
+
+    /* ===== Screen 3: Editor ===== */
+    function openEditor(idx) {
+      editIndex = idx;
+      const isNew = idx === -1;
+      document.getElementById('editor-title').textContent = isNew ? 'New Concert' : 'Edit Concert';
+      document.getElementById('btn-delete').style.display = isNew ? 'none' : 'inline-flex';
+
+      const fb = document.getElementById('editor-feedback');
+      fb.className = 'feedback';
+      fb.style.display = 'none';
+
+      if (isNew) {
+        document.getElementById('ed-date').value = '';
+        document.getElementById('ed-venue').value = '';
+        document.getElementById('ed-city').value = '';
+        document.getElementById('ed-country').value = '';
+        document.getElementById('ed-ticket').value = '';
+      } else {
+        const c = concerts[idx];
+        document.getElementById('ed-date').value = c.date || '';
+        document.getElementById('ed-venue').value = c.venue || '';
+        document.getElementById('ed-city').value = c.city || '';
+        document.getElementById('ed-country').value = c.country || '';
+        document.getElementById('ed-ticket').value = c.ticketUrl || '';
+      }
+
+      showScreen('editor');
+    }
+
+    /* Save */
+    document.getElementById('btn-save').addEventListener('click', async () => {
+      const date = document.getElementById('ed-date').value.trim();
+      const venue = document.getElementById('ed-venue').value.trim();
+      const city = document.getElementById('ed-city').value.trim();
+      const country = document.getElementById('ed-country').value.trim();
+      const ticketUrl = document.getElementById('ed-ticket').value.trim();
+
+      // Validate
+      if (!date || !venue || !city || !country) {
+        showFeedback('Please fill in all required fields.', 'error');
+        return;
+      }
+
+      const concert = { date, venue, city, country };
+      if (ticketUrl) concert.ticketUrl = ticketUrl;
+
+      if (editIndex === -1) {
+        concerts.push(concert);
+      } else {
+        concerts[editIndex] = concert;
+      }
+
+      const btn = document.getElementById('btn-save');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Saving…';
+
+      try {
+        const msg = editIndex === -1
+          ? 'Add concert: ' + venue + ' (' + date + ')'
+          : 'Update concert: ' + venue + ' (' + date + ')';
+        await saveConcerts(msg);
+        showFeedback('Saved! The live site will update within ~1 minute.', 'success');
+        setTimeout(() => {
+          showScreen('list');
+          renderList();
+        }, 1200);
+      } catch (err) {
+        // Revert in-memory change
+        if (editIndex === -1) {
+          concerts.pop();
+        }
+        showFeedback('Save failed: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Save';
+      }
+    });
+
+    function showFeedback(msg, type) {
+      const fb = document.getElementById('editor-feedback');
+      fb.textContent = msg;
+      fb.className = 'feedback visible ' + type;
+    }
+
+    /* Delete */
+    document.getElementById('btn-delete').addEventListener('click', () => {
+      document.getElementById('delete-overlay').classList.add('visible');
+    });
+
+    document.getElementById('btn-cancel-delete').addEventListener('click', () => {
+      document.getElementById('delete-overlay').classList.remove('visible');
+    });
+
+    document.getElementById('btn-confirm-delete').addEventListener('click', async () => {
+      document.getElementById('delete-overlay').classList.remove('visible');
+
+      const removed = concerts.splice(editIndex, 1)[0];
+
+      const btn = document.getElementById('btn-save');
+      btn.disabled = true;
+      document.getElementById('btn-delete').disabled = true;
+
+      try {
+        await saveConcerts('Delete concert: ' + (removed.venue || '') + ' (' + (removed.date || '') + ')');
+        showScreen('list');
+        renderList();
+      } catch (err) {
+        // Revert
+        concerts.splice(editIndex, 0, removed);
+        showFeedback('Delete failed: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        document.getElementById('btn-delete').disabled = false;
+      }
+    });
+
+    /* ===== Navigation ===== */
+    document.getElementById('btn-new').addEventListener('click', () => openEditor(-1));
+    document.getElementById('btn-editor-back').addEventListener('click', () => {
+      showScreen('list');
+    });
+
+    /* ===== Logout ===== */
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      googleUser = null;
+      if (typeof google !== 'undefined' && google.accounts) {
+        google.accounts.id.disableAutoSelect();
+      }
+      showScreen('login');
+    });
+
+    /* ===== Change PAT ===== */
+    document.getElementById('btn-change-pat').addEventListener('click', () => {
+      document.getElementById('pat-input').value = '';
+      showScreen('pat');
+    });
+  })();
+  </script>
+</body>
+</html>
