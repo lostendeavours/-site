@@ -91,6 +91,17 @@
     return d.toLocaleDateString(locale, { day: '2-digit', month: 'short', year: 'numeric' });
   }
 
+  function formatCountry(code, lang) {
+    if (!code) return '';
+    try {
+      const locale = lang === 'de' ? 'de-DE' : 'en-US';
+      const names = new Intl.DisplayNames([locale], { type: 'region' });
+      return names.of(code.toUpperCase()) || code;
+    } catch (_) {
+      return code;
+    }
+  }
+
   function renderConcerts(list) {
     const container = document.getElementById('shows-list');
     const empty = document.getElementById('shows-empty');
@@ -128,7 +139,8 @@
       venue.textContent = c.venue || '';
       const location = document.createElement('span');
       location.className = 'show-location';
-      const locParts = [c.city, c.country].filter(Boolean);
+      const displayCountry = formatCountry(c.country, currentLang);
+      const locParts = [c.city, displayCountry].filter(Boolean);
       location.textContent = locParts.join(', ');
       info.appendChild(venue);
       info.appendChild(location);
